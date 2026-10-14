@@ -41,8 +41,7 @@
 
 <!-- Your community, and what your classifier sorts posts into. Three or four
      sentences. -->
-
-
+My community is Formula 1 fans: the posts and comments people write about races, drivers and teams on forums like r/formula1. The classifier reads one post and sorts it into what kind of thing the person is doing: `reaction` (responding to something that just happened), `hot_take` (a confident claim with nothing to back it up) or `question` (asking for information). The point is to tell the heat of the moment apart from opinion and from curiosity, which is most of what an F1 discussion thread is made of.
 
 ---
 
@@ -54,35 +53,46 @@
      The decision rule is worth a point on its own and it's the thing most
      people leave out. Every taxonomy has a hardest boundary. Name yours. -->
 
-### `label_one`
+### `reaction`
 
-**Definition:**
-
-**Example 1:**
->
-
-**Example 2:**
->
-
-### `label_two`
-
-**Definition:**
+**Definition:** An immediate response to something that just happened, expressing the poster's feeling about it.
 
 **Example 1:**
->
+> Congratulations to Lance Stroll for Completing his 1st Full Race This Year
 
 **Example 2:**
->
+> Max via Viaplay: "My radio totally didn't work. They couldn't hear me at all, but luckily i was able to hear them. sometimes you wanna ask something, you want to give certain feedback... but luckily 90% of the things GP said was what i wanted to ask, so, it was totally ok."
+
+### `question`
+
+**Definition:** A post that asks other people for information or an explanation.
+
+**Example 1:**
+> How do the drivers stay hydrated during the race?
+
+**Example 2:**
+> Does anyone have a link to the onboard from that overtake?
+
+### `hot_take`
+
+**Definition:** A confident claim or opinion about a driver, team or the sport that offers no support for itself. It might be true, but it isn't argued.
+
+**Example 1:**
+> DRS makes racing artificial, scrap it
+
+**Example 2:**
+> Every new circuit is the same design with different colours
 
 ### The hardest boundary
 
 **Which two labels:**
+`hot_take` and `reaction`
 
 **The decision rule I used every time:**
 <!-- e.g. "If the post names a specific checkable fact, it's `analysis`, even
      if the tone is heated." -->
 
-
+If the post is responding to a specific moment that just happened (a pass, a pit call, a crash, a result), it's `reaction`, even if it is phrased as a claim ("that pit call lost them the race"). If it's a general claim that would still make sense next week and doesn't depend on one moment ("street circuits make for boring racing"), it's `hot_take`.
 
 ---
 
@@ -92,18 +102,21 @@
      cases. -->
 
 **Where the posts came from:**
+Only 4 of the 200 posts in `labels.csv` are real: I copied them from F1 fan discussion (TODO: say which thread or site). The other 196 are synthetic. I could not collect more real posts in the time I had, so Claude wrote them in the style of F1 fan comments. They are marked `synthetic` in the `note` column of every row. They are not posts from the community, so the results of this project say little about how real F1 fans write. Replacing them with real posts is the first thing I would do next.
 
-**How I labelled them:** <!-- Cold first? Pre-labelled with AI and corrected?
+**How I labelled them:**
+<!-- Cold first? Pre-labelled with AI and corrected?
 Say so plainly — the disclosure is required, not penalised. -->
+All 200 rows were labelled by Claude, using the three definitions above and the decision rule for `hot_take` vs `reaction`. 170 were labelled as it wrote them, and I asked it to label the other 30 afterwards (my 4 real posts plus 26 synthetic ones). I have not yet read and corrected every label, so none of them count as labelled cold by me. TODO: read through at least the 30 most recently labelled rows and the 4 real posts, change any I disagree with, and say here how many I changed.
 
 **Counts per label:**
 
 | Label | Count | Share |
 |---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
-| **Total** |  | 100% |
+| `reaction` | 83 | 41.5% |
+| `hot_take` | 71 | 35.5% |
+| `question` | 46 | 23.0% |
+| **Total** | 200 | 100% |
 
 **Three hard cases**
 
@@ -162,14 +175,14 @@ of next unit's variance. -->
 
 **Moment 1**
 
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
+- *What I asked for:* 
+- *What came back:* 
+- *What I changed:* 
 
 **Moment 2**
 
-- *What I asked for:*
-- *What came back:*
+- *What I asked for:* 
+- *What came back:* 
 - *What I changed:*
 
 **Pre-labelling disclosure:**
