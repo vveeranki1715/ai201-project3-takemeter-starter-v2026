@@ -55,11 +55,11 @@ whether you hit them:
 
 <!-- Your criterion. It must name a number. -->
 
-
+Overall accuracy is at least 0.65 on the held-out test set, on every one of the three seeds.
 
 **Why this target:**
 
-
+Three balanced-ish labels means a guesser gets about 33%, and always guessing `reaction` (my biggest label) gets about 41%. 0.65 is clearly above both, and it is about the lowest accuracy I'd call useful for sorting F1 posts. I kept it moderate because I only have 200 posts, 196 of them synthetic, and it has to hold on all three seeds.
 
 ---
 
@@ -67,11 +67,11 @@ whether you hit them:
 
 <!-- Your criterion. -->
 
-
+`reaction` and `hot_take` each have an F1 of at least 0.60 on the held-out set, on every seed.
 
 **Why this target:**
 
-
+These are my two biggest labels (83 and 71 posts), so they have the most training data and the steadiest scores. They are also the pair my decision rule struggles with, so 0.60 checks that the model learned the boundary and isn't just calling everything `reaction`.
 
 ---
 
@@ -79,11 +79,11 @@ whether you hit them:
 
 <!-- Your criterion. -->
 
-
+`question` has an F1 of at least 0.55 on the held-out set, on every seed.
 
 **Why this target:**
 
-
+`question` is my smallest label (46 posts, 23%), so only about 7 land in the test split and one wrong prediction moves its F1 a lot. I set it 0.05 looser than the other two for that reason. Questions are the most distinct label (they usually end in `?` or start with how/does/why), so I still expect it to do reasonably well.
 
 ---
 
@@ -91,11 +91,11 @@ whether you hit them:
 
 <!-- Your criterion. -->
 
-
+No label makes up more than 50% of `labels.csv`, and the smallest label is at least 20%.
 
 **Why this target:**
 
-
+Right now it is 41.5% `reaction`, 35.5% `hot_take` and 23.0% `question`. If I add more posts, especially real ones, this stops me drifting into a dataset where one label dominates and accuracy looks good for the wrong reason. The 20% floor protects `question`, which is already close to it.
 
 ---
 
@@ -103,11 +103,11 @@ whether you hit them:
 
 <!-- Your criterion. -->
 
-
+My agreement with the staff set (30 posts, labelled under the staff taxonomy) is at least 70%, i.e. 21 of 30.
 
 **Why this target:**
 
-
+This measures labelling consistency, which a model can't fix. If I only agree with someone applying written rules 70% of the time, my own 200 labels are probably noisy and the model's ceiling is low. 70% allows for the posts that are deliberately ambiguous, and a number much lower would tell me my `hot_take` vs `reaction` rule isn't clear.
 
 ---
 
