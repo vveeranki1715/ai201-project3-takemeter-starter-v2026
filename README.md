@@ -124,68 +124,79 @@ All 200 rows were labelled by Claude, using the three definitions above and the 
      been, and what you chose. These are worth more than the easy 190. -->
 
 **1.**
-> *The post:*
+> *The post:* Lando being told off for drinking coke in the cooldown room: "I just did a race. So I'm allowed to drink what I would like. thank you so much."
 >
-> *Could have been:*
+> *Could have been:* `reaction` or `hot_take`
 >
-> *I chose, because:*
+> *I chose `reaction`, because:* it is about a specific moment that had just happened (he was told off straight after a race), so my decision rule sends it to `reaction`. It is a quote from a driver and not the poster's own feeling, and it makes a point without supporting it, which is what pulled it towards `hot_take`.
 
 **2.**
-> *The post:*
+> *The post:* Max Verstappen is apparently named after the MotoGP driver, Max Biaggi
 >
-> *Could have been:*
+> *Could have been:* `hot_take` or `reaction`
 >
-> *I chose, because:*
+> *I chose `hot_take`, because:* it is a plain piece of trivia, so none of my three labels fits it well. It isn't a response to anything that just happened, which rules out `reaction`, and it is a claim about a driver that offers no support, which is the nearest to my `hot_take` definition. It isn't an opinion, so this is the weakest fit in my data.
 
 **3.**
-> *The post:*
+> *The post:* Congratulations to Lance Stroll for Completing his 1st Full Race This Year
 >
-> *Could have been:*
+> *Could have been:* `reaction` or `hot_take`
 >
-> *I chose, because:*
+> *I chose `reaction`, because:* it responds to a specific race that had just happened. The wording is sarcastic, so it also reads as a claim about Stroll's season in general, which is what made me pause, but the trigger is that one race, so `reaction`.
 
 ---
 
 ## The Training Run
 
-<!-- Your starting model, your settings, and anything you changed and why. -->
+**Base model:** `distilbert-base-uncased`, fine-tuned on my labels.
 
-**Base model:**
-
-**Settings:** <!-- epochs, learning rate, batch size, seed -->
+**Settings:** 3 epochs, learning rate 2e-5, batch size 16, 128 tokens per post, seed 42. Trained on an Apple Silicon GPU (`mps`).
 
 **Anything I changed from the defaults, and why:**
+Nothing. All the settings are the notebook defaults. The only thing I changed in the notebook was the `LABELS` list, from the starter's `["analysis", "hot_take", "reaction"]` to `["question", "hot_take", "reaction"]` to match my CSV. The notebook's data check flagged the mismatch before I trained.
 
-**Split sizes:** <!-- train / val / test, and per-label counts in the test
-split. If a label had fewer than about 8 in test, say so — it explains a lot
-of next unit's variance. -->
+**Split sizes:** 139 train / 31 validation / 30 test (70/15/15, stratified).
 
+| Label | Train | Val | Test |
+|---|---|---|---|
+| `question` | 32 | 7 | 7 |
+| `hot_take` | 49 | 11 | 11 |
+| `reaction` | 58 | 13 | 12 |
 
+`question` has only 7 examples in the test split, under the roughly 8 the notebook suggests, so its scores will move a lot between seeds. Also, 196 of the 200 posts are synthetic, so the data is cleaner and more patterned than real fan comments would be.
 
 ---
 
 ## How I Used AI
 
-<!-- Two specific moments — what you asked, what came back, what you changed.
+I used Claude (Claude Code) for a large part of this project, so I am listing exactly what it did and what I did.
 
-     ⚠️ Plus disclosure of any pre-labelling. If you had a model pre-label a
-     batch and then read and corrected every one, say that. It's an allowed
-     workflow and disclosing it costs you nothing. Not disclosing it is the
-     problem. -->
+**What Claude did:**
+- Wrote 196 of the 200 posts in `labels.csv` in the style of F1 fan comments (the other 4 are real posts I copied).
+- Assigned the label on all 200 rows, using my definitions.
+- Drafted the five criteria in `criteria.md` and the first version of several README sections, which I then reviewed.
+- Found why the notebook's data check was failing (the leftover `analysis` label) and told me how to fix it.
+
+**What I did:**
+- Chose the community (F1 fans), the three labels and the `hot_take` vs `reaction` decision rule.
+- Collected the 4 real posts and decided to continue with synthetic data for the rest, because I could not collect more in the time I had. I accepted the cost: the project says little about how real F1 fans write.
+- Decided to skip labelling a cold set myself, so none of my labels are cold.
+- Made the `LABELS` fix in the notebook, ran sections 1 to 5, and read the output.
 
 **Moment 1**
 
-- *What I asked for:* 
-- *What came back:* 
-- *What I changed:* 
+- *What I asked for:* 200 labelled F1 posts, using my three label definitions and my decision rule, because I did not have enough real posts.
+- *What came back:* 196 synthetic posts with labels, 83 `reaction`, 71 `hot_take` and 46 `question`, all marked `synthetic` in the `note` column.
+- *What I changed:* I did not correct any labels. I kept the data and disclosed it in this README, in the dataset section and here. Reading and correcting the labels is still undone.
 
 **Moment 2**
 
-- *What I asked for:* 
-- *What came back:* 
-- *What I changed:*
+- *What I asked for:* help getting the notebook to train, after the kernel would not start and then the data check printed `[FIX ME]`.
+- *What came back:* the kernel failure was a slow first `import torch` that timed out, and the `[FIX ME]` was the starter's `LABELS` list still containing `analysis` instead of `question`.
+- *What I changed:* I restarted the kernel, changed `LABELS` to `["question", "hot_take", "reaction"]`, re-ran sections 2 to 5, and got `results.json` and `test_split.csv`.
 
 **Pre-labelling disclosure:**
+All 200 labels were assigned by Claude, and I did not read and correct them. So none of them are cold labels, and the dataset has not been through the review step the assignment describes. I am saying this plainly because it affects how far to trust the results.
 
 <!-- ═══════════════════════ UNIT 6 — THE TEST ═══════════════════════
 
